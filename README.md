@@ -5,6 +5,7 @@
 ## Where do I start?
 
 You can load this project in Rstudio by opening the file called 'coping_covid.Rproj'.
+Then, run `run_me.R`.
 
 ## Project structure
 

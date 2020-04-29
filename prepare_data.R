@@ -5,13 +5,13 @@
 
 library(worcs)
 library(foreign)
-library(motley)
 library(psych)
 library(pastecs)
 library(dplyr)
+library(tidySEM)
 source("scales_list.R")
-source("rfunctions.R")
-data <- read.spss("DATA _COVID_ALL - CompletedOnly_final.sav",
+
+data <- read.spss("DATA _COVID_ALL - CompletedOnly_final_final.sav",
                   use.value.labels = FALSE,
                   to.data.frame = TRUE)
 names(data) <- tolower(names(data))
@@ -24,7 +24,7 @@ names(data) <- tolower(names(data))
 # 
 # Let me know if you need anything else to start the analyses.
 
-scales <- doReliability(data, scales_list, write_files = TRUE)
+scales <- create_scales(data, scales_list, omega = "omega.tot", write_files = TRUE)
 
 data <- cbind(data, scales$scores)
 
@@ -39,13 +39,14 @@ new_names <- c("severe_life" = "personal_threat",
                )
 names(data)[match(names(new_names), names(data))] <- new_names
 grep("house", names(data), value = TRUE)
-head(data[, ])
+
 use_variables <- c(
   "countryres", 
   "countryhome",
   new_names,
-  names(scales_list)[names(scales_list) %in% names(data)]
+  names(scales_list)[names(scales_list) %in% names(data)],
+  grep("^(trust|freq)_(who|nhs|gov|newspaper|fb|tw|ig|maps|google)$", names(data), value = TRUE)
 )
 
 #data <- data[, use_variables]
-#closed_data(data[, use_variables])
+closed_data(data[, use_variables])

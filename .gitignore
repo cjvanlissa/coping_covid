@@ -16,3 +16,7 @@
 *.sps
 *.sav
 .RData
+*.eps
+*.png
+*.svg
+*.RData
