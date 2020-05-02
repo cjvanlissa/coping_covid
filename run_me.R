@@ -55,10 +55,7 @@ ggsave("curvilinearl.png", p)
 ggsave("curvilinearl.svg", p)
 ggsave("curvilinearl.eps", p)
 
-model_control <- "
-sense_of_control ~ avoidance_actions + freqcomcov + coping_actions + government_actions + institutional_trust + government_actions:institutional_trust"
-res_control <- sem(model_control, data)
-summary(res_control)
+
 
 model_conspiracy <- "
 sense_of_control ~ avoidance_actions + freqcomcov + coping_actions + government_actions + institutional_trust + government_actions:institutional_trust"
@@ -77,3 +74,24 @@ summary(res_control)
 # )])
 
 source("plot_models.R")
+
+
+# Latent variable model with interacting indicators -----------------------
+vars <- table(gsub("^(trust|freq)_", "", c(grep("^trus", names(data), value = TRUE), 
+                                   grep("^freq", names(data), value = TRUE))))
+
+vars <- names(vars)[vars == 2]
+df <- data[, c(paste0("freq_", vars), paste0("trust_", vars))]
+df <- data.frame(scale(df, scale = FALSE))
+ints <- data.frame(sapply(vars, function(x){
+  df[[paste0("freq_", x)]] * df[[paste0("trust_", x)]]
+}))
+names(ints) <- paste0("int_", names(ints))
+
+df_control <- cbind(data, ints)
+
+model_control <- paste0("media =~ ", paste0(grep("int_", names(df_control), value = T), collapse = " + "), "\n", "sense_of_control ~ avoidance_actions + media + freqcomcov + coping_actions + government_actions + institutional_trust + government_actions:institutional_trust")
+
+res_control <- sem(model_control, df_control)
+summary(res_control, standardized=TRUE)
+
