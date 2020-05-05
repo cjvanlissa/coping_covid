@@ -16,7 +16,7 @@ depression ~~ anxiety
 "
 res <- sem(model, data, meanstructure = TRUE)
 table_results(res, columns = NULL) %>%
-  filter(!se == "") %>%
+  #filter(!se == "") %>%
   select(label:confint_std) -> tab
 write.csv(tab, "model.csv", row.names = F)
 saveRDS(res, "res.RData")
@@ -33,7 +33,7 @@ depression ~~ anxiety
 "
 res_full <- sem(model_full, data, meanstructure = TRUE)
 table_results(res_full, columns = NULL) %>%
-  filter(!se == "") %>%
+  #filter(!se == "") %>%
   select(label:confint_std) -> tab
 write.csv(tab, "model_full.csv", row.names = F)
 
@@ -56,27 +56,8 @@ ggsave("curvilinearl.svg", p)
 ggsave("curvilinearl.eps", p)
 
 
-
-model_conspiracy <- "
-sense_of_control ~ avoidance_actions + freqcomcov + coping_actions + government_actions + institutional_trust + government_actions:institutional_trust"
-res_control <- sem(model_control, data)
-summary(res_control)
-
-
-# library(tidyLPA)
-# 
-# mix <- estimate_profiles(data[, c("misinformedness", "trust_local", "trust_global", "trust_scient")],
-#                          1:4, variances = "varying")
-# 
-# sapply(data[, c("misinformedness", "trust_local", "trust_global", "trust_scient")], hist)
-# 
-# psych::principal(data[, c("misinformedness", "trust_local", "trust_global", "trust_scient")])
-# )])
-
-source("plot_models.R")
-
-
 # Latent variable model with interacting indicators -----------------------
+
 vars <- table(gsub("^(trust|freq)_", "", c(grep("^trus", names(data), value = TRUE), 
                                    grep("^freq", names(data), value = TRUE))))
 
@@ -95,3 +76,29 @@ model_control <- paste0("media =~ ", paste0(grep("int_", names(df_control), valu
 res_control <- sem(model_control, df_control)
 summary(res_control, standardized=TRUE)
 
+table_results(res_control, columns = NULL) %>%
+  #filter(!se == "") %>%
+  select(label:confint_std) -> tab
+write.csv(tab, "model_control.csv", row.names = F)
+
+saveRDS(res_control, "res_control.RData")
+
+data$education
+# Conspiracy --------------------------------------------------------------
+
+data$conspiracy <- ordered(data$conspiracy > 0, labels = c("No", "Yes"))
+model_conspiracy <- "
+admit_confusion =~ fake_news + confusion
+sense_of_control ~ conspiracy
+conspiracy ~ social_isolation + trust_fb + admit_confusion + education
+"
+res_conspiracy <- sem(model_conspiracy, data)
+summary(res_conspiracy)
+#write.table(get_layout(res_conspiracy), "clipboard", sep = "\t")
+
+table_results(res_conspiracy, columns = NULL) %>%
+  #filter(!se == "") %>%
+  select(label:confint_std) -> tab
+write.csv(tab, "model_conspiracy.csv", row.names = F)
+
+source("plot_models.R")

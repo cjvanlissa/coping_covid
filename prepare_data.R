@@ -35,10 +35,13 @@ new_names <- c("severe_life" = "personal_threat",
                "demo_age" = "age",
                "demo_gender" = "gender",
                "demo_education" = "education",
-               "demo_income" = "income"
+               "demo_income" = "income",
+               "virus_natart" = "conspiracy",
+               "emo_confused" = "confusion",
+               "fakenews" = "fake_news"
                )
 names(data)[match(names(new_names), names(data))] <- new_names
-grep("house", names(data), value = TRUE)
+grep("conf", names(data), value = TRUE)
 
 use_variables <- c(
   "countryres", 
