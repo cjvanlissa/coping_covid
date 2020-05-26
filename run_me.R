@@ -113,7 +113,6 @@ write.csv(tab, "model_control.csv", row.names = F)
 
 saveRDS(res_control, "res_control.RData")
 
-data$education
 # Conspiracy --------------------------------------------------------------
 
 model_conspiracy <- "
@@ -162,12 +161,13 @@ source("plot_models.R")
 
 # Simple model with social isolation->anxiety and sense of control->dep --------
 mod_name = "model_26_5"
-est_model(mod_name, 
+fits <- est_model(mod_name, 
 "
 depression ~ personal_threat  + sense_of_control + social_isolation + personal_threat:sense_of_control + personal_threat:social_isolation
 anxiety ~ personal_threat  + sense_of_control + social_isolation + personal_threat:sense_of_control + personal_threat:social_isolation
 depression ~~ anxiety
 ")
+model_fits <- rbind(model_fits, c(model = "basic_26-5", fits))
 res <- readRDS(paste0("res_", mod_name, ".RData"))
 lo <- get_layout("social_isolation", "",
                  "personal_threat:social_isolation", "depression",
@@ -206,7 +206,7 @@ ggsave(paste0(mod_name, ".eps"), p)
 # Full model revised ------------------------------------------------------
 mod_name <- "model_full_26_5"
 
-est_model(mod_name, 
+fits <- est_model(mod_name, 
 "
 perceived_risk ~ local_diagnoses
 personal_threat ~ income + perceived_risk
@@ -222,6 +222,7 @@ depression ~ personal_threat:social_isolation + social_isolation +  personal_thr
 anxiety ~ social_actions + days_isolation + local_diagnoses+ perceived_risk
 anxiety ~ personal_threat:social_isolation + social_isolation +  personal_threat + sense_of_control + personal_threat:sense_of_control
 ")
+model_fits <- rbind(model_fits, c(model = "full_26-5", fits))
 res <- readRDS(paste0("res_", mod_name, ".RData"))
 summary(res,fit.measures=TRUE, estimates = FALSE)
 
@@ -287,8 +288,9 @@ tot := a+(b*c)")
 
 mod_name <- "model_control_26_5"
 
-est_model(mod_name, 
+fits <- est_model(mod_name, 
           model_control)
+model_fits <- rbind(model_fits, c(model = "control_26-5", fits))
 res <- readRDS(paste0("res_", mod_name, ".RData"))
 summary(res,fit.measures=TRUE, estimates = FALSE)
 
@@ -327,8 +329,9 @@ ggsave(paste0(mod_name, ".eps"), p)
 
 model_anx <- gsub("sense_of_control", "anxiety", model_control)
 mod_name <- "model_anxiety_26_5"
-est_model(mod_name, 
+fits <- est_model(mod_name, 
           model_anx)
+model_fits <- rbind(model_fits, c(model = "anxiety_26-5", fits))
 res <- readRDS(paste0("res_", mod_name, ".RData"))
 summary(res,fit.measures=TRUE, estimates = FALSE)
 
@@ -356,3 +359,5 @@ p <- plot(p)+coord_fixed()
 ggsave(paste0(mod_name, ".png"), p)
 ggsave(paste0(mod_name, ".svg"), p)
 ggsave(paste0(mod_name, ".eps"), p)
+
+write.csv(model_fits, "model_fits.csv", row.names = FALSE)
