@@ -1,0 +1,9 @@
+worcs_version: 0.1.1
+creator: Lissa102
+checksums:
+  data.csv: eeefab28853efdcb7e50042766918bb6
+  synthetic_data.csv: 362ea3e1c2d0bc46e5e1204f219571e4
+data:
+  data.csv:
+    synthetic: synthetic_data.csv
+    codebook: codebook.Rmd

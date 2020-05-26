@@ -48,7 +48,12 @@ use_variables <- c(
   "countryhome",
   new_names,
   names(scales_list)[names(scales_list) %in% names(data)],
-  grep("^(trust|freq)_(who|nhs|gov|newspaper|fb|tw|ig|maps|google)$", names(data), value = TRUE)
+  grep("^(trust|freq)_(who|nhs|gov|newspaper|fb|tw|ig|maps|google)$", names(data), value = TRUE),
+  c("cope1", "cope2", "cope3", "cope4", "cope5", "cope6", "cope7", 
+    "cope8", "cope9", "cope10", "cope11", "cope12", "cope13", "cope14", 
+    "cope15", "cope16", "cope17", "cope18", "cope19", "cope20", "cope21", 
+    "cope22", "cope23", "cope24", "cope25", "cope26", "cope27", "cope28"
+  )
 )
 
 #data <- data[, use_variables]

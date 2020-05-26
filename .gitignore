@@ -9,7 +9,6 @@
 *.fff
 *.log
 *.tex
-!checksums.csv
 .Rproj.user
 !synthetic_data.csv
 *.docx
@@ -20,3 +19,6 @@
 *.png
 *.svg
 *.RData
+data.csv
+!codebook.csv
+dev/

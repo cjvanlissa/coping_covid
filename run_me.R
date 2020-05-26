@@ -7,7 +7,7 @@ library(lavaan)
 library(tidySEM)
 library(ggplot2)
 library(dplyr)
-data <- load_data()
+load_data()
 
 model <- "
 depression ~ personal_threat + social_isolation + personal_threat:social_isolation
@@ -102,3 +102,28 @@ table_results(res_conspiracy, columns = NULL) %>%
 write.csv(tab, "model_conspiracy.csv", row.names = F)
 
 source("plot_models.R")
+
+
+# Cope CFA ----------------------------------------------------------------
+tmp <- read.table("clipboard", sep = "\t")
+mod_subscales <- apply(tmp, 1, function(i){tolower(paste0(i[1], " =~ ", i[4], " + ", i[5]))})
+mod_posneg <- tolower(c(
+  sapply(unique(tmp$V2), function(i){
+  paste0(i[1], " =~ ", paste0(unlist(tmp[tmp$V2 == i, 4:5]), collapse = " + "))
+  }, USE.NAMES = FALSE),
+  apply(tmp[, 4:5], 1, function(i){paste0(i[1], " ~~ ", i[2])})
+  ))
+
+res_subscales <- sem(mod_subscales, data, std.lv = TRUE)
+summary(res_subscales, standardized = TRUE, fit.measures = T)
+
+res_posneg <- sem(mod_posneg, data, std.lv = TRUE)
+summary(res_posneg, standardized = TRUE, fit.measures = T)
+
+
+df_cope <- data[, grep("^cope\\d{1,2}$", names(data), value = TRUE)]
+model_cope <- paste0("cope =~ ", paste0(grep("^cope\\d{1,2}$", names(data), value = TRUE), collapse = " + "))
+
+res_cope <- sem(model_cope, data, std.lv = TRUE)
+summary(res_cope, standardized = TRUE)
+fa.parallel(df_cope)

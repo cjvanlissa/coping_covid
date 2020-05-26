@@ -20,5 +20,10 @@ scales_list <- list(
   trust_local = c("trustgov_country", "trustpers_country"),
   trust_global = c("trustgov_global", "trustpers_global"),
   trust_scient = c("trustscient_country", "trustscient_global"),
-  feelinginformed = c("informed1", "informed2", "informed3", "informed4")
+  feelinginformed = c("informed1", "informed2", "informed3", "informed4"),
+  cope = c("cope1", "cope2", "cope3", "cope4", "cope5", "cope6", "cope7", 
+           "cope8", "cope9", "cope10", "cope11", "cope12", "cope13", "cope14", 
+           "cope15", "cope16", "cope17", "cope18", "cope19", "cope20", "cope21", 
+           "cope22", "cope23", "cope24", "cope25", "cope26", "cope27", "cope28"
+  )
 )
