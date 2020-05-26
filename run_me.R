@@ -8,12 +8,14 @@ library(tidySEM)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+
 est_model <- function(name, model){
   res <- sem(model, data, meanstructure = TRUE)
   table_results(res, columns = NULL) %>%
     dplyr::select(label:confint_std) -> tab
   write.csv(tab, paste0(name, ".csv"), row.names = F)
   saveRDS(res, paste0("res_", name, ".RData"))
+  fitmeasures(res)
 }
 proper=function(x){
   x <- gsub("_", " ", x)
@@ -40,6 +42,7 @@ anxiety ~ personal_threat + sense_of_control + personal_threat:sense_of_control
 depression ~~ anxiety
 "
 res <- sem(model, data, meanstructure = TRUE)
+model_fits <- c(model = "model_basic", fitmeasures(res))
 table_results(res, columns = NULL) %>%
   #filter(!se == "") %>%
   select(label:confint_std) -> tab
@@ -56,6 +59,7 @@ anxiety ~ personal_threat + sense_of_control + personal_threat:sense_of_control
 depression ~~ anxiety
 "
 res_full <- sem(model_full, data, meanstructure = TRUE)
+model_fits <- rbind(model_fits, c(model = "model_full", fitmeasures(res_full)))
 summary(res_full, fit.measures = TRUE, estimates = FALSE)
 table_results(res_full, columns = NULL) %>%
   #filter(!se == "") %>%
@@ -99,6 +103,7 @@ df_control <- cbind(data, ints)
 model_control <- paste0("media =~ ", paste0(grep("int_", names(df_control), value = T), collapse = " + "), "\n", "sense_of_control ~ avoidance_actions + media + freqcomcov + coping_actions + government_actions + institutional_trust + government_actions:institutional_trust")
 
 res_control <- sem(model_control, df_control)
+model_fits <- rbind(model_fits, c(model = "model_control", fitmeasures(res_control)))
 summary(res_control, standardized=TRUE, fit.measures=T)
 
 table_results(res_control, columns = NULL) %>%
@@ -117,6 +122,7 @@ sense_of_control ~ conspiracy
 conspiracy ~ social_isolation + trust_fb + admit_confusion + education
 "
 res_conspiracy <- sem(model_conspiracy, data)
+model_fits <- rbind(model_fits, c(model = "model_conspiracy", fitmeasures(res_conspiracy)))
 summary(res_conspiracy, fit.measures = TRUE)
 #write.table(get_layout(res_conspiracy), "clipboard", sep = "\t")
 
