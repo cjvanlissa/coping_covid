@@ -121,7 +121,7 @@ sense_of_control ~ conspiracy
 conspiracy ~ social_isolation + trust_fb + admit_confusion + education
 "
 res_conspiracy <- sem(model_conspiracy, data)
-model_fits <- rbind(model_fits, c(model = "model_conspiracy", fitmeasures(res_conspiracy)))
+model_fits <- rbind(model_fits, c(model = "model_conspiracy", fitmeasures(res_conspiracy)[colnames(model_fits)][-1]))
 summary(res_conspiracy, fit.measures = TRUE)
 #write.table(get_layout(res_conspiracy), "clipboard", sep = "\t")
 

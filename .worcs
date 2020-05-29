@@ -1,8 +1,8 @@
 worcs_version: 0.1.1
 creator: Lissa102
 checksums:
-  data.csv: eeefab28853efdcb7e50042766918bb6
-  synthetic_data.csv: 362ea3e1c2d0bc46e5e1204f219571e4
+  data.csv: 24da407e2854427f4a0ac35601efb1c8
+  synthetic_data.csv: 25857913bb8a4a5c866e6fef040d065c
 data:
   data.csv:
     synthetic: synthetic_data.csv

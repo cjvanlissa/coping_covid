@@ -11,7 +11,7 @@ library(dplyr)
 library(tidySEM)
 source("scales_list.R")
 
-data <- read.spss("DATA _COVID_ALL - CompletedOnly_final_final.sav",
+data <- read.spss("DATA _COVID_ALL - Final_manuscript.sav",
                   use.value.labels = FALSE,
                   to.data.frame = TRUE)
 names(data) <- tolower(names(data))
