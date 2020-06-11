@@ -37,8 +37,8 @@ data$days2 <- data$days_isolation*data$days_isolation
 
 
 model <- "
-depression ~ personal_threat + social_isolation + personal_threat:social_isolation
-anxiety ~ personal_threat + sense_of_control + personal_threat:sense_of_control
+depression ~ perceived_threat + social_isolation + perceived_threat:social_isolation
+anxiety ~ perceived_threat + sense_of_control + perceived_threat:sense_of_control
 depression ~~ anxiety
 "
 res <- sem(model, data, meanstructure = TRUE)
@@ -50,12 +50,12 @@ write.csv(tab, "model.csv", row.names = F)
 saveRDS(res, "res.RData")
 
 model_full <- "
-personal_threat ~ income + local_diagnoses + perceived_risk
+perceived_threat ~ income + local_diagnoses + perceived_risk
 social_isolation ~ social_actions + days_isolation + days2
 sense_of_control ~ days_isolation + days2
 
-depression ~ personal_threat + social_isolation + personal_threat:social_isolation
-anxiety ~ personal_threat + sense_of_control + personal_threat:sense_of_control
+depression ~ perceived_threat + social_isolation + perceived_threat:social_isolation
+anxiety ~ perceived_threat + sense_of_control + perceived_threat:sense_of_control
 depression ~~ anxiety
 "
 res_full <- sem(model_full, data, meanstructure = TRUE)
@@ -163,16 +163,16 @@ source("plot_models.R")
 mod_name = "model_26_5"
 fits <- est_model(mod_name, 
 "
-depression ~ personal_threat  + sense_of_control + social_isolation + personal_threat:sense_of_control + personal_threat:social_isolation
-anxiety ~ personal_threat  + sense_of_control + social_isolation + personal_threat:sense_of_control + personal_threat:social_isolation
+depression ~ perceived_threat  + sense_of_control + social_isolation + perceived_threat:sense_of_control + perceived_threat:social_isolation
+anxiety ~ perceived_threat  + sense_of_control + social_isolation + perceived_threat:sense_of_control + perceived_threat:social_isolation
 depression ~~ anxiety
 ")
 model_fits <- rbind(model_fits, c(model = "basic_26-5", fits))
 res <- readRDS(paste0("res_", mod_name, ".RData"))
 lo <- get_layout("social_isolation", "",
-                 "personal_threat:social_isolation", "depression",
-                 "personal_threat", "",
-                 "personal_threat:sense_of_control", "anxiety",
+                 "perceived_threat:social_isolation", "depression",
+                 "perceived_threat", "",
+                 "perceived_threat:sense_of_control", "anxiety",
                  "sense_of_control", "", rows = 5)
 
 p <- prepare_graph(res, layout = lo, nodes = get_nodes(res, label = NULL), angle = 1, rect_width = 3, rect_height = 1.4, spacing_x = 6, curvature = 50)
@@ -209,18 +209,18 @@ mod_name <- "model_full_26_5"
 fits <- est_model(mod_name, 
 "
 perceived_risk ~ local_diagnoses
-personal_threat ~ income + perceived_risk
+perceived_threat ~ income + perceived_risk
 social_isolation ~ social_actions + days_isolation + days2
 sense_of_control ~ days_isolation + days2
-social_isolation ~~ personal_threat
+social_isolation ~~ perceived_threat
 social_isolation ~~ sense_of_control
-personal_threat ~~ sense_of_control
+perceived_threat ~~ sense_of_control
 
 depression ~ social_actions + days_isolation + local_diagnoses+ perceived_risk
-depression ~ personal_threat:social_isolation + social_isolation +  personal_threat + sense_of_control + personal_threat:sense_of_control
+depression ~ perceived_threat:social_isolation + social_isolation +  perceived_threat + sense_of_control + perceived_threat:sense_of_control
 
 anxiety ~ social_actions + days_isolation + local_diagnoses+ perceived_risk
-anxiety ~ personal_threat:social_isolation + social_isolation +  personal_threat + sense_of_control + personal_threat:sense_of_control
+anxiety ~ perceived_threat:social_isolation + social_isolation +  perceived_threat + sense_of_control + perceived_threat:sense_of_control
 ")
 model_fits <- rbind(model_fits, c(model = "full_26-5", fits))
 res <- readRDS(paste0("res_", mod_name, ".RData"))
@@ -232,9 +232,9 @@ tmp <- tmp[order(tmp$mi, decreasing = TRUE), ]
 
 lo <- eval(parse(text = 'structure(list(V1 = c("social_actions", "days_isolation", "", 
 "days2", "local_diagnoses", "", "perceived_risk", "income"), V2 = c("social_isolation", 
-"", "sense_of_control", "", "", "", "", "personal_threat"
+"", "sense_of_control", "", "", "", "", "perceived_threat"
 ), V3 = c("", "", "depression", "", "", "", "anxiety", ""), V4 = c("", 
-"", "personal_threat:social_isolation", "", "", "", "personal_threat:sense_of_control", 
+"", "perceived_threat:social_isolation", "", "", "", "perceived_threat:sense_of_control", 
 "")), class = "data.frame", row.names = c(NA, -8L))'))
 
 p <- prepare_graph(res, edges = get_edges(res, label = "est_sig_std"), nodes = get_nodes(res, label = NULL), layout = lo, angle = 1, rect_width = 3, rect_height = 1.5, spacing_y = 2, spacing_x = 6, curvature = 50, text_size = 3)

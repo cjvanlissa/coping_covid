@@ -1,5 +1,5 @@
 ---
-title: "Codebook created on 2020-05-29 at 2020-05-29 16:06:17"
+title: "Codebook created on 2020-06-11 at 2020-06-11 13:03:38"
 output: github_document
 ---
 
@@ -13,7 +13,7 @@ The data contains 8230 cases and 82 variables.
 ## Codebook
 
 ```{r}
-summaries <- read.csv("codebook.csv", stringsAsFactors = FALSE)
+summaries <- read.csv("C:/Git_Repositories/mulukom/coping_covid/codebook.csv", stringsAsFactors = FALSE)
 summaries <- summaries[, !colSums(is.na(summaries)) == nrow(summaries)]
 options(knitr.kable.NA = '')
 knitr::kable(summaries, row.names = FALSE, digits = 2)

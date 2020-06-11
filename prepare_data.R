@@ -28,7 +28,7 @@ scales <- create_scales(data, scales_list, omega = "omega.tot", write_files = TR
 
 data <- cbind(data, scales$scores)
 
-new_names <- c("severe_life" = "personal_threat",
+new_names <- c("severe_life" = "perceived_threat",
                "diagn_local_sum" = "local_diagnoses",
                "diagn_nonlocal_sum" = "global_diagnoses",
                "sit_isoldays" = "days_isolation",
