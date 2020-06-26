@@ -31,7 +31,7 @@ load_data()
 desc <- descriptives(data)
 # Center all variables except excl_vars
 excl_vars <- c("countryres", "countryhome", "gender", "conspiracy")
-data[-match(excl_vars, names(data))] <- scale(data[-match(excl_vars, names(data))], scale = FALSE)
+data[which(!names(data) %in% excl_vars)] <- scale(data[which(!names(data) %in% excl_vars)], scale = FALSE)
 data$conspiracy <- ordered(data$conspiracy > 0, labels = c("No", "Yes"))
 data$days2 <- data$days_isolation*data$days_isolation
 

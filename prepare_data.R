@@ -11,7 +11,7 @@ library(dplyr)
 library(tidySEM)
 source("scales_list.R")
 
-data <- read.spss("DATA _COVID_ALL - Final_manuscript.sav",
+data <- read.spss("DATA_PsychologicalImpact_COVID19_anon.sav",
                   use.value.labels = FALSE,
                   to.data.frame = TRUE)
 names(data) <- tolower(names(data))
@@ -29,8 +29,8 @@ scales <- create_scales(data, scales_list, omega = "omega.tot", write_files = TR
 data <- cbind(data, scales$scores)
 
 new_names <- c("severe_life" = "perceived_threat",
-               "diagn_local_sum" = "local_diagnoses",
-               "diagn_nonlocal_sum" = "global_diagnoses",
+               "diagn_local" = "local_diagnoses",
+               "diagn_no" = "global_diagnoses",
                "sit_isoldays" = "days_isolation",
                "demo_age" = "age",
                "demo_gender" = "gender",
@@ -41,20 +41,13 @@ new_names <- c("severe_life" = "perceived_threat",
                "fakenews" = "fake_news"
                )
 names(data)[match(names(new_names), names(data))] <- new_names
-grep("conf", names(data), value = TRUE)
 
 use_variables <- c(
   "countryres", 
-  "countryhome",
   new_names,
   names(scales_list)[names(scales_list) %in% names(data)],
   grep("^(trust|freq)_(who|nhs|gov|newspaper|fb|tw|ig|maps|google)$", names(data), value = TRUE),
-  c("cope1", "cope2", "cope3", "cope4", "cope5", "cope6", "cope7", 
-    "cope8", "cope9", "cope10", "cope11", "cope12", "cope13", "cope14", 
-    "cope15", "cope16", "cope17", "cope18", "cope19", "cope20", "cope21", 
-    "cope22", "cope23", "cope24", "cope25", "cope26", "cope27", "cope28"
-  )
+  unique(unlist(scales_list)[unlist(scales_list) %in% names(data)])
 )
 
-#data <- data[, use_variables]
 closed_data(data[, use_variables])
