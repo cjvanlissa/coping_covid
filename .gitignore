@@ -20,3 +20,4 @@ data.csv
 !codebook.csv
 dev/
 *.zip
+!checklist.csv
