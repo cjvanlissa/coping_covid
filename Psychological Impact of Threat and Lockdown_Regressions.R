@@ -15,7 +15,7 @@ library(broom.mixed)
 
 ##Preparation##
 
-data <- read.spss("DATA_PsychologicalImpact_COVID19.sav",
+data <- read.spss("DATA_PsychologicalImpact_COVID19_anon.sav",
                   use.value.labels = FALSE,
                   to.data.frame = TRUE)
 names(data) <- tolower(names(data))
