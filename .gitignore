@@ -21,3 +21,8 @@ data.csv
 dev/
 *.zip
 !checklist.csv
+!model*.csv
+!scale table.csv
+!correlation table.csv
+!*.png
+!*.svg
