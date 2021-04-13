@@ -26,3 +26,10 @@ dev/
 !correlation table.csv
 !*.png
 !*.svg
+iris.csv
+!synthetic_iris.csv
+!codebook_iris.csv
+mtcars.csv
+!synthetic_mtcars.csv
+!codebook_mtcars.csv
+df.csv

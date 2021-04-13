@@ -3,7 +3,18 @@ creator: Lissa102
 checksums:
   data.csv: 49bec0123f4a99e7ddb4991c8b66f61b
   synthetic_data.csv: e62c8b2047a04897292143fd1a23857f
+  iris.csv: 395d6abd001abf3760a1a794ef4c453c
+  synthetic_iris.csv: 23def7635387ec581566d840db0dbd7e
+  mtcars.csv: 3184b87f041571f146a351b2cef50caa
+  synthetic_mtcars.csv: 2d700c71ffc0cdf60ebeff3e5edc58b8
+  df.csv: 5f246079b4925e5ceda642063a9a9dab
 data:
   data.csv:
     synthetic: synthetic_data.csv
     codebook: codebook.Rmd
+  iris.csv:
+    synthetic: synthetic_iris.csv
+    codebook: codebook_iris.Rmd
+  mtcars.csv:
+    synthetic: synthetic_mtcars.csv
+    codebook: codebook_mtcars.Rmd

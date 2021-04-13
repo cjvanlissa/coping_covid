@@ -23,6 +23,40 @@ names(data) <- tolower(names(data))
 # However, I’m not sure what the best way of dealing with this is – for now I’ve let the subscales be represented by one item in some cases, and two items in others (where reliability was fine), but I’m not sure if this is best practice.
 # 
 # Let me know if you need anything else to start the analyses.
+library(lavaan)
+scales_mi <- scales_list[sapply(scales_list, length) > 2]
+cntrs <- table(data$countryres)
+cntrs <- cntrs[cntrs > 100]
+df_mi
+df_mi <- data[which(data$countryres %in% names(cntrs)), ]
+tab_mi <- sapply(scales_mi, function(this_scale){
+  #this_scale <- scales_mi[[1]]
+  #this_scale <- c("govstate_capab", "govstate_benevol", "govstate_trust")
+  df_tmp <- df_mi[, c(this_scale, "countryres")]
+  df_tmp <- df_tmp[!rowSums(is.na(df_tmp)) == length(this_scale), ]
+  if(length(table(df_tmp$countryres)) == 1) return(rep(NA, 15))
+  mod <- paste0('F =~ ', paste0(this_scale, collapse = " + "))
+  # configural invariance
+  out <- tryCatch({
+    fit1 <- cfa(mod, data = df_tmp, group = "countryres")
+    # metric invariance
+    fit2 <- cfa(mod, data = df_tmp, group = "countryres",
+                group.equal = "loadings")
+    c(fitmeasures(fit1)[c("chisq", "df", "npar", "bic", "cfi", "tli", "rmsea")],
+             fitmeasures(fit2)[c("chisq", "df", "npar", "bic", "cfi", "tli", "rmsea")],
+             unlist(lavTestLRT(fit1, fit2)[2, 7]))
+    #names(out)[9:13] <- paste0("metric_", names(out)[9:13])
+    #out
+  }, error = function(x){
+    browser()
+  })
+  out
+})
+tab_mi <- data.frame(t(tab_mi))
+names(tab_mi)[15] <- "p_delta_chisq"
+tab_mi$delta_bic <- tab_mi$bic.1-tab_mi$bic
+tab_mi <- cbind(Variable = rownames(tab_mi), tab_mi)
+write.csv(tab_mi, "measurement_invariance.csv", row.names = FALSE)
 
 scales <- create_scales(data, scales_list, omega = "omega.tot", write_files = TRUE)
 
